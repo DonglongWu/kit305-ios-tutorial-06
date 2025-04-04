@@ -8,21 +8,28 @@
 
 import UIKit
 
+
 class ViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
-        // create an alert view
-        let alert = UIAlertController(
-            title: "Hello World!",
-            message: "You just made your first iOS app!",
-            preferredStyle: UIAlertController.Style.alert)
-        
-        // add an action (button)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+        super.viewDidAppear(animated)
 
-        // show the alert
+        // Create an alert view with updated strings and actionSheet style
+        let alert = UIAlertController(
+            title: "Welcome!",
+            message: "This is your first iOS app using action sheet!",
+            preferredStyle: .actionSheet)  // Changed from .alert to .actionSheet
+
+        // Add an action (button)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            // <-- This is where you could put the print AFTER user clicks OK
+            print("User tapped OK")
+        }))
+
+        // Present the alert
         self.present(alert, animated: true, completion: nil)
-        
-        
+
+        // Debug message appears immediately after presenting the alert
+        print("Got to this part of the program")
     }
 }

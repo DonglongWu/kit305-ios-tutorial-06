@@ -16,8 +16,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var secondResponseLabel: UILabel!
 
     // some member variables for the game
-    var secretNumber:Int = 0
+    var secretNumber:Int = 50
     var guessCount:Int = 0
+    let maxGuesses: Int = 0
+    var gameOver: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +35,11 @@ class ViewController: UIViewController {
 
     @IBAction func enterTapped(_ sender: UIButton)
     {
-        
+        if gameOver {
+            print("Game is over. No more guesses allowed.")
+            firstResponseLabel.text = "Game Over! Tap Reset to play again."
+            return
+        }
         if let enteredGuess:Int = Int(guessField.text!)
         {
             print("Guess Entered");
@@ -48,14 +54,27 @@ class ViewController: UIViewController {
                 firstResponseLabel.text = "Too low - try again!"
             }
             
-            if (enteredGuess == secretNumber)
-            {
-                firstResponseLabel.text = "That's correct - in \(guessCount) tries!"
+            if enteredGuess == secretNumber {
+                
+                // Create an alert for correct guess
+                let alert = UIAlertController(
+                    title: "Correct!",
+                    message: "You guessed in \(guessCount) tries!",
+                    preferredStyle: .alert)
+                            
+                alert.addAction(UIAlertAction(
+                    title: "Cool!",
+                    style: .cancel,
+                    handler: nil))
+                            
+                self.present(alert, animated: true, completion: nil)
+
+                // Set labels and flags
+                firstResponseLabel.text = " You got it!"
                 secondResponseLabel.text = "Tap Reset to play again."
-            }
-            else
-            {
-                guessCount = guessCount + 1
+                gameOver = true
+            } else {
+                guessCount += 1
                 tryCountLabel.text = String(guessCount)
             }
         }
@@ -76,7 +95,8 @@ class ViewController: UIViewController {
     {
         print("The game has been reset...")
         
-        secretNumber = Int(arc4random() % 100)        
+        secretNumber = 50
+        print("The secret number is \(secretNumber)")
         guessCount = 1
         
         tryCountLabel.text = String(guessCount)
